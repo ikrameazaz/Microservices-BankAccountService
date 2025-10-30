@@ -1,5 +1,6 @@
 package org.sid.bank_account_service.Services;
 
+import org.sid.bank_account_service.Mappers.BankAccountMapper;
 import org.sid.bank_account_service.dto.BankAccountRequestDto;
 import org.sid.bank_account_service.dto.BankAccountResponseDto;
 import org.sid.bank_account_service.entities.BankAccount;
@@ -14,9 +15,11 @@ import java.util.UUID;
 public class IbankAccountImpl implements IbankAccountService{
 
     BankAccountRepository bankAccountRepository;
+    BankAccountMapper bankAccountMapper;
 
-    public IbankAccountImpl(BankAccountRepository bankAccountRepository) {
+    public IbankAccountImpl(BankAccountRepository bankAccountRepository , BankAccountMapper bankAccountMapper) {
         this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountMapper = bankAccountMapper;
     }
 
     @Override
@@ -30,14 +33,9 @@ public class IbankAccountImpl implements IbankAccountService{
 
                 .build();
         BankAccount savedBankAccount=bankAccountRepository.save(bankAccount);
+        BankAccountResponseDto bankAccountResponseDto =bankAccountMapper.fromBankAccount(savedBankAccount);
 
-        BankAccountResponseDto bankAccountResponseDto = BankAccountResponseDto.builder()
-                 .id(savedBankAccount.getId())
-                .createdAt(savedBankAccount.getCreatedAt())
-                .balance(savedBankAccount.getBalance())
-                .type(savedBankAccount.getType())
-                .currency(savedBankAccount.getCurrency())
-                .build();
+
 
         return bankAccountResponseDto;
 
