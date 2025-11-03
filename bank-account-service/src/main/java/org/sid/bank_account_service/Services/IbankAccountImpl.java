@@ -30,13 +30,24 @@ public class IbankAccountImpl implements IbankAccountService{
                 .balance(bankAccountDto.getBalance())
                 .type(bankAccountDto.getType())
                 .currency(bankAccountDto.getCurrency())
+                .build();
+        BankAccount savedBankAccount=bankAccountRepository.save(bankAccount);
+        BankAccountResponseDto bankAccountResponseDto =bankAccountMapper.fromBankAccount(savedBankAccount);
+        return bankAccountResponseDto;
+
+    }
+    @Override
+    public BankAccountResponseDto updateAccount(String id, BankAccountRequestDto bankAccountDto) {
+        BankAccount bankAccount = BankAccount.builder()
+                .id(id)
+                .createdAt(new Date())
+                .balance(bankAccountDto.getBalance())
+                .type(bankAccountDto.getType())
+                .currency(bankAccountDto.getCurrency())
 
                 .build();
         BankAccount savedBankAccount=bankAccountRepository.save(bankAccount);
         BankAccountResponseDto bankAccountResponseDto =bankAccountMapper.fromBankAccount(savedBankAccount);
-
-
-
         return bankAccountResponseDto;
 
     }
